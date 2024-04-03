@@ -1,0 +1,31 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Punto Game</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Welcome to Punto!</h1>
+
+ <form action="{{ url_for('ustaw_graczy') }}" method="post">
+        <label for="liczba_graczy">Wybierz liczbę graczy:</label>
+        <select name="liczba_graczy" id="liczba_graczy">
+            <option value="2">2 Graczy</option>
+            <option value="3">3 Graczy</option> 
+            <option value="4">4 Graczy</option>
+        </select>
+        <button type="submit">Rozpocznij grę</button>
+    </form>
+<br>
+<br>
+<br>
+<br>
+<br>
+    <h2> Zasady:</h2>
+    <br>
+    <p class="zasady-gry">Gra Punto to emocjonujące wyzwanie dla 2-4 graczy. Rozgrywka odbywa się na siatce 6x6. Celem gry jest ułożenie trzech (czterech, jeśli gramy w 2 osoby) własnych kart w linii - poziomej, pionowej lub na skos. W grze obowiązuje zasada nadpisywania: możesz umieścić kartę o wyższym nominale na karcie o niższym. Zwycięża gracz, który jako pierwszy zrealizuje swój plan i ułoży trzy karty w wymaganej konfiguracji. Strategia i przewidywanie ruchów przeciwnika są kluczem do zwycięstwa! <br><br>P.S  Poleca się ustalić przed rozgrywką, który z graczy weźmie jaki kolor (kolory do wyboru: czerwony, niebieski, zielony, żółty).</p>
+
+</body>
+</html>

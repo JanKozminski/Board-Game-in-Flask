@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Punto Game</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+{% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="flash-message">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+{% if not gra_aktywna %}
+    <div class="game-over">
+        <p>Gra zakończona. <a href="{{ url_for('index') }}">Wróć do strony głównej.</a></p>
+    </div>
+{% endif %}
+
+    <h1>Destroy your enemies</h1>
+    <div class="aktywny-gracz-info">
+        Tura gracza: {{ gracze[session['aktywny_gracz']].identyfikator }} ({{ gracze[session['aktywny_gracz']].kolor }})
+    </div>
+    <table class="game-board">
+        {% for row in range(6) %}
+            <tr>
+                {% for col in range(6) %}
+                    {% set karta = gra.siatka[row][col] %}
+                    {% if karta %}
+                        <td class="karta-na-planszy" style="background-color: {{ karta.kolor }};" onclick="umiescKarte({{ row }}, {{ col }});">
+                            {{ karta.wartosc }}
+                        </td>
+                    {% else %}
+                        <td onclick="umiescKarte({{ row }}, {{ col }});"></td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    {% for gracz in gracze %}
+        <div class="gracz" {% if loop.index0 != session['aktywny_gracz'] %} style="display:none;" {% endif %}>
+            <h2>Gracz {{ gracz.identyfikator }} ({{ gracz.kolor }})</h2>
+            <div class="karty">
+                {% for karta in gracz.zestaw_kart %}
+                    <div class="karta" onclick="wybierzKarte('{{ karta.id }}', this);">{{ karta }}</div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+
+    <form id="kartaForm" action="{{ url_for('umiesc_karte') }}" method="post" style="display: none;">
+        <input type="hidden" name="karta_id" id="kartaId">
+        <input type="hidden" name="x" id="x">
+        <input type="hidden" name="y" id="y">
+    </form>
+
+    <script>
+        var wybranaKartaId;
+        var ostatnioWybranaKarta;
+
+    function wybierzKarte(kartaId, element) {
+        if (ostatnioWybranaKarta) {
+            ostatnioWybranaKarta.classList.remove('karta-podswietlona');
+        }
+        wybranaKartaId = kartaId;
+        element.classList.add('karta-podswietlona');
+        ostatnioWybranaKarta = element;
+    }
+
+        function umiescKarte(x, y) {
+            document.getElementById('x').value = x;
+            document.getElementById('y').value = y;
+            document.getElementById('kartaId').value = wybranaKartaId;
+            document.getElementById('kartaForm').submit();
+        }
+    </script>
+
+
+
+
+</body>
+</html>
